@@ -33,8 +33,45 @@ const PortfolioMaker = () => {
   function navigateToHome() {
     navigate("/");
   }
+
+  const deleteAccount = async () => {
+    try {
+      const response = await axios.delete(
+        "http://localhost:8000/api/deleteAccount/" +
+          localStorage.getItem("userId")
+      );
+      if (response.status == 200 && response.data) {
+        toast("User account deleted successfully.");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        navigateToHome();
+      } else {
+        toast("Something wrong. Please try again.");
+      }
+    } catch (err: any) {
+      toast("Something wrong. Please try again.");
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    navigateToHome();
+  };
+
   return (
     <div>
+      <ToastContainer />
+      <div className="menu-bar row">
+        <a href="#" className="delete-acc" onClick={deleteAccount}>
+          Delete Account
+        </a>
+        <a href="#" className="logout" onClick={logout}>
+          Log Out
+        </a>
+      </div>
       <div>
         <Accordion defaultExpanded >
           <AccordionSummary
